@@ -1,0 +1,41 @@
+---
+title: "Análise Estatística do casos de cancer antes e depois do acidente de Chernobyl"
+author: "Huggo Parcelly - Victor Paiva"
+date: "2022-11-21"
+output: pdf_document
+---
+
+## Descrição do problema
+
+Neste relatório utilizou-se um banco de dados que foi retirado a partir de um estudo com as populações das cidades de Gomel, Mogilev e Belarus. Dividiu-se as populações em dois grupos, antes e depois do aciente de Chernobyl, entre os anos de 1985 e 1986.
+
+Para fins de estudos desse relatório, levantou-se a problemática para comparar a média dos casos de cancer e classificar qual(is) o(s) tipo(s) de cancer com maior número de casos após o acidente.
+
+## População associada
+População das cidades de Gomel, Mogilev e Belarus
+
+## Variáveis e tipos de interesse para pesquisa
+O período de tempo, antes e depois do acidente
+Os tipos de cancer e a quantidade de casos, por 100.000 pessoas.
+
+## Objetivos do estudo
+### Objetivos gerais
+Comparar as médias dos casos de cancer entre 1985 e 1986, nas cidades de Gomel, Mogilev e Belarus.
+Verificar quais os tipos tiveram um aumento.
+
+### Objetivos específicos
+Realizou-se uma comparação das médias dos casos de cancer, por 100.000 pessoas, das cidades que foram afetada pela radiação de Chernobyl. E classificar os tipos de cancer que tiveram um aumento.
+
+### Hipóteses (caso tenha)
+
+## Coleta de amostra
+Os dados utilizados nesse relatório foram coletados de um estudo feito com a população das cidades afetadas pela explosão de Chernobyl, 
+
+## Parâmetro, Estatística e Estimativa
+Parâmetros: 
+Estatística: 
+Estimativa: 
+
+## Análise Exploratória de Dados (EDA)
+
+## Inferências estatísticas
