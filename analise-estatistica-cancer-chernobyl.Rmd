@@ -38,4 +38,73 @@ Estimativa: Estima-se que as médias dos casos de cancer aumentou.
 
 ## Análise Exploratória de Dados (EDA)
 
+if(!require(magrittr)) install.packages("magrittr")
+library(magrittr) 
+if(!require(dplyr)) install.packages("dplyr") 
+library(dplyr)
+if(!require(ggplot2)) install.packages("ggplot2")
+library(ggplot2)
+if(!require(readr)) install.packages("readr")
+library(readr)
+
+dados <- read_csv("cancer_before_and_after_Chernobyl_Belarus.csv")
+
+before = subset(dados, dados$year == 1985)
+after = subset(dados, dados$year == 1986)
+total_rate_before = sum(before$cases)
+total_rate_after = sum(after$cases)
+
+total_rate <- c(total_rate_before, total_rate_after)
+years <- c(1985, 1986)
+
+
+perc_higher <- total_rate_after/total_rate_before *100
+
+
+df_total <- data.frame(years, total_rate)
+
+
+##Grafico de barras para visualizar a relação de casos de cancer com o acidente nuclear de Chernobyl.
+
+df_total %>% ggplot() + geom_col(aes(x=years, y=total_rate)) + ggtitle("Casos de Cancer em Chernobyl comparando antes e \ndepois do acidente nuclear em Chernobyl no ano 1986") +
+  ylab("Casos de cancer") + expand_limits(y=0) + xlab("1985                      vs                      1986") + theme(axis.text.x=element_blank())
+
+##Histograma separado por ano.
+
+ggplot(data = dados, mapping = aes(x = cases)) +
+  geom_histogram(color = "white") +
+  facet_wrap(~ year, ncol = 1) +
+  labs(x="Casos de cancer")
+
+dados1 <- transform(
+  dados, acidente= ifelse(year==1985, "before", "after"))
+
+dados1 %>% ggplot(aes(x = cases)) +
+  geom_density(aes(fill = acidente),
+               alpha = 0.5
+  ) +
+  labs(x="Casos de cancer", y="Densidade")
+
+dados %>% ggplot() +
+  geom_col(aes(year,cases, fill=cancer_type), alpha=0.7) + facet_grid(.~location) + scale_x_continuous(breaks = c(1985, 1986), labels = c("before", "after")) +
+  ggtitle("Casos de cancer em diferentes cidades \nantes e depois do acidente nuclear de \nChernobyl")
+
+df_total
+
+x1 <- dados1$cases[dados1$acidente == "before"]
+x2 <- dados1$cases[dados1$acidente == "after"]
+
+par(mfrow = c(2,1), mar = rep(2.5, 4))
+
+hist(x1, prob=TRUE, main = "1985")
+lines(density(x1))
+
+hist(x2, prob=TRUE, main = "1986", xlab = "Casos de cancer")
+lines(density(x2))
+
+Aparentemente houve um aumento de casos de cancer após o acidente na usina 
+nuclear de Chernoby.
+
+Usaremos o teste de hipóteses para comprovar se realmente houve um aumento dos casos de cancer em todas as cidades ou foi apenas uma coincidência da amostra coletada.
+
 ## Inferências estatísticas
