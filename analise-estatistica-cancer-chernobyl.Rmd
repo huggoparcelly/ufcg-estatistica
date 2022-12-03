@@ -47,7 +47,8 @@ analisando os anos 1985 e 1986.
 
 Realizou-se uma comparação das médias dos casos de cancer, por 100.000
 pessoas, das cidades de Gomel, Mogilev e Belarus, nos anos de 1985 e
-1986.E o objetivo é verificar em quanto foi o aumento do número de casos.
+1986.E o objetivo é verificar em quanto foi o aumento do número de
+casos.
 
 ### Hipóteses (caso tenha)
 
@@ -59,8 +60,8 @@ que foram produndamente afetadas pela explosão de Chernobyl.
 
 ## Parâmetro, Estatística e Estimativa
 
-Parâmetros: Médias dos casos antes e depois da explosão.
-Estimativa: Estima-se que as médias dos casos de cancer aumentou.
+Parâmetros: Médias dos casos antes e depois da explosão. Estimativa:
+Estima-se que as médias dos casos de cancer aumentou.
 
 ## Análise Exploratória de Dados (EDA)
 
@@ -77,9 +78,11 @@ Estimativa: Estima-se que as médias dos casos de cancer aumentou.
     library(readr)
 
         dados <- read_csv("cancer_before_and_after_Chernobyl_Belarus.csv")
-
-        before = subset(dados, dados$year == 1985) 
-
+        
+        ## Dados antes do acidente
+        before = subset(dados, dados$year == 1985)
+        
+        ## Dados depois do acidente
         after = subset(dados, dados$year == 1986)
 
         total_rate_before = sum(before$cases) 
@@ -107,7 +110,8 @@ Estimativa: Estima-se que as médias dos casos de cancer aumentou.
 
         dados1 %>% ggplot(aes(x = cases)) + geom_density(aes(fill = acidente),
         alpha = 0.5 ) + labs(x="Casos de cancer", y="Densidade")
-
+        
+        ## Gráfico dos casos de cancer nas três cidades, antes e depois do acidente
         dados %>% ggplot() + geom_col(aes(year,cases, fill=cancer_type), alpha=0.7) + facet_grid(.~location) + scale_x_continuous(breaks = c(1985, 1986), labels = c("before", "after")) + ggtitle("Casos de cancer em diferentes cidades nantes e depois do acidente nuclear de Chernobyl")
 
         df_total
@@ -126,34 +130,32 @@ Estimativa: Estima-se que as médias dos casos de cancer aumentou.
 
 ## Inferências estatísticas
 
+Foram realizadas 84 observações, sendo 42 no ano de 1985 e 42 no ano de
+1985, período antes e depois do acidente de Chernobyl. Para esses dados
+foram observados as quantidades de casos, para 7 tipos de câncer, por
+100.000 habitantes, homens e mulheres, em mesma proporção. Os tipos de
+câncer observados foram colon, rim, pele, pulmão, pancreas, reto e
+tireoide.
+
+Vamos verificar a média de todos os casos de câncer nos dois anos,
+referentes a antes e depois do acidente.
+
+
+    mean_before = mean(before$cases)
+    mean_after = mean(after$cases)
+
 Aparentemente houve um aumento de casos de cancer após o acidente na
-usina nuclear de Chernoby.
+usina nuclear de Chernoby, vamos provar essa hipótese.
 
 Usaremos o teste de hipóteses para comprovar se realmente houve um
 aumento dos casos de cancer em todas as cidades ou foi apenas uma
 coincidência da amostra coletada.
 
-H0 como sendo a hipótese de que não houve um aumento do número de casos de cancer
-H1 como sendo a hipótese de que houve um aumento do número de casos de cancer
+H0 como sendo a hipótese de que não houve um aumento do número de casos
+de cancer H1 como sendo a hipótese de que houve um aumento do número de
+casos de cancer
 
 Tomando o nível de significancia como 0.001
 
-Vamos rejeitar H0, que é a a hipótese de que não houve um aumento nos casos de cancer.
-
-
-
-```
-  significancia <- 0.001
-  
-  resultado1 <- shapiro.test(x1)
-p_valor1 = resultado1$p.value
-
-p_valor1 <= significancia
-
-resultado2 <- shapiro.test(x2)
-p_valor2 = resultado2$p.value
-
-p_valor2 <= significancia
-```
-
-
+Vamos rejeitar H0, que é a a hipótese de que não houve um aumento nos
+casos de cancer.
