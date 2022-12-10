@@ -92,13 +92,15 @@ Estima-se que as médias dos casos de cancer aumentou.
 
         years <- c(1985,1986)
 
-        perc_higher <- total_rate_after/total_rate_before * 100
-
         df_total <- data.frame(years, total_rate)
 
 ## Grafico de barras para visualizar a relação de casos de cancer com o acidente nuclear de Chernobyl.
 
         df_total %>% ggplot() + geom_col(aes(x=years, y=total_rate)) + ggtitle("Casos de Cancer em Chernobyl comparando antes e depois do acidente nuclear em Chernobyl no ano 1986") + ylab("Casos de cancer") + expand_limits(y=0) + xlab("1985 vs 1986") + theme(axis.text.x=element_blank())
+        
+      perc_higher <- (total_rate_after - total_rate_before)/total_rate_before * 100
+
+Houve um aumento de *38,27%* nos casos de câncer.
 
 ## Histograma separado por ano.
 
@@ -137,25 +139,51 @@ foram observados as quantidades de casos, para 7 tipos de câncer, por
 câncer observados foram colon, rim, pele, pulmão, pancreas, reto e
 tireoide.
 
-Vamos verificar a média de todos os casos de câncer nos dois anos,
-referentes a antes e depois do acidente.
+Verificamos a média de todos os casos de câncer nos dois anos, referentes a antes e depois do acidente.
+
+Aparentemente houve um aumento de *38.27%* nos casos de cancer após o
+acidente na usina nuclear de Chernoby.
+
+```
+  ## Casos de cancer em homens e mulheres, antes e depois do acidente
+dados %>% ggplot() + geom_col(aes(year, cases, fill=sex), alpha=0.7) + scale_x_continuous(breaks = c(1985, 1986), labels = c("before", "after"))  + ggtitle("Casos de cancer em homens e mulheres antes e depois do acidente")
 
 
-    mean_before = mean(before$cases)
-    mean_after = mean(after$cases)
+## Dados de homens antes e depois do acidente
+before = subset(dados, dados$year == 1985)
+after = subset(dados, dados$year == 1986)
 
-Aparentemente houve um aumento de casos de cancer após o acidente na
-usina nuclear de Chernoby, vamos provar essa hipótese.
+## Homens antes
+before_men = subset(before, sex == 'men')
+total_rate_before_men = sum(before_men$cases)
 
-Usaremos o teste de hipóteses para comprovar se realmente houve um
-aumento dos casos de cancer em todas as cidades ou foi apenas uma
-coincidência da amostra coletada.
+## Homens depois
+after_men = subset(after, sex == 'men')
+total_rate_after_men = sum(after_men$cases)
 
-H0 como sendo a hipótese de que não houve um aumento do número de casos
-de cancer H1 como sendo a hipótese de que houve um aumento do número de
-casos de cancer
+## Mulheres antes
+before_women = subset(before, sex == 'women')
+total_rate_before_women = sum(before_women$cases)
 
-Tomando o nível de significancia como 0.001
+## Mulheres depois
+after_men = subset(after, sex == 'men')
+total_rate_after_men = sum(after_men$cases)
 
-Vamos rejeitar H0, que é a a hipótese de que não houve um aumento nos
-casos de cancer.
+
+## Porcentagem de aumento de casos em homens e mulheres
+total_rate_men <- c(total_rate_before_men, total_rate_after_men)
+total_rate_women <- c(total_rate_before_women, total_rate_after_women)
+
+perc_higher_men <- (total_rate_after_men - total_rate_before_men)/total_rate_before_men * 100
+perc_higher_men
+
+perc_higher_women <- (total_rate_after_women - total_rate_before_women)/total_rate_before_women * 100
+perc_higher_women
+
+```
+
+O aumento percentual do número de casos em homens é de *41.92%* e em mulheres é de *29.72%*
+
+De acordo com os dados, o aumento percentual no número de casos em homens se mostrou maior que em mulheres, indicando que os homens foram mais propensos a contrair câncer que as mulheres.
+
+O que podemos concluir é que após o acidente na usina nuclear de Chernobyl, houve um aumento nos casos de câncer nas cidades próximas. Os dados mostraram uma maior ocorrência de câncer em homens.
