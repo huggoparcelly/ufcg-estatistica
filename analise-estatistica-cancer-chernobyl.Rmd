@@ -2,9 +2,11 @@
 title: "Análise Estatística do casos de cancer antes e depois do acidente de Chernobyl"
 author: "Huggo Parcelly - Victor Paiva"
 date: "2022-11-21"
-output: pdf_document
-editor_options: 
-  markdown: 
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  markdown:
     wrap: 72
 ---
 
@@ -20,12 +22,9 @@ Uma consequência grave do acidente foi o aumento dos casos de cancer,
 que será o objeto de estudo desse relatório. Para tal, utilizou-se um
 banco de dados que foi retirado a partir de um estudo com as populações
 das cidades de Gomel, Mogilev e Belarus, que são próximas ao acidente.
-As populações estudadas foram divididas em dois grupos, antes e depois
-do aciente de Chernobyl, nos anos de 1985 e 1986.
 
 Para fins de estudos desse relatório, levantou-se a problemática para
-comparar as médias dos casos de cancer e classificar qual(is) o(s)
-tipo(s) de cancer com maior número de casos após o acidente.
+comparar as médias dos casos de cancer nos anos de 1985 e 1986, ou seja, antes e depois do acidente.
 
 ## População associada
 
@@ -33,7 +32,7 @@ Homens e mulheres das cidades de Gomel, Mogilev e Belarus
 
 ## Variáveis e tipos de interesse para pesquisa
 
-A variável em estudo é a quantidade de casos de cancer, na população das
+ - A variável em estudo é a quantidade de casos de cancer, na população das
 três cidades e é do tipo quantitiva discreta.
 
 ## Objetivos do estudo
@@ -47,104 +46,134 @@ analisando os anos 1985 e 1986.
 
 Realizou-se uma comparação das médias dos casos de cancer, por 100.000
 pessoas, das cidades de Gomel, Mogilev e Belarus, nos anos de 1985 e
-1986.E o objetivo é verificar em quanto foi o aumento do número de
-casos.
+1986. O objetivo é verificar que houve um aumento na média dos casos e em quanto foi o aumento, através dos testes t student e do Man-whitney.
 
-### Hipóteses (caso tenha)
+### Hipóteses
 
 ## Coleta de amostra
 
-Os dados utilizados nesse relatório foram coletados a partir de um
-estudo feito com a população das cidades de Gomel, Mogilev e Belarus,
-que foram produndamente afetadas pela explosão de Chernobyl.
+Foram realizadas 84 observações, sendo 42 no ano de 1985 e 42 no ano de
+1986, período antes e depois do acidente de Chernobyl. Para esses dados
+foram observados as quantidades de casos, para 7 tipos de câncer, por
+100.000 habitantes, homens e mulheres, em mesma proporção. 
+
+Os tipos de câncer observados foram colon, rim, pele, pulmão, pancreas, reto e
+tireoide.
 
 ## Parâmetro, Estatística e Estimativa
 
-Parâmetros: Médias dos casos antes e depois da explosão. Estimativa:
-Estima-se que as médias dos casos de cancer aumentou.
+ - Parâmetros: Médias dos casos antes e depois da explosão. 
+ - Estatística: 
+ - Estimativa: Estima-se que as médias dos casos de cancer aumentou.
 
 ## Análise Exploratória de Dados (EDA)
 
-    if(!require(magrittr)) install.packages("magrittr") 
-    library(magrittr) 
+```{r}
 
-    if(!require(dplyr)) install.packages("dplyr") 
-    library(dplyr) 
-
-    if(!require(ggplot2)) install.packages("ggplot2") 
-    library(ggplot2) 
-
-    if(!require(readr)) install.packages("readr") 
-    library(readr)
-
-        dados <- read_csv("cancer_before_and_after_Chernobyl_Belarus.csv")
-        
-        ## Dados antes do acidente
-        before = subset(dados, dados$year == 1985)
-        
-        ## Dados depois do acidente
-        after = subset(dados, dados$year == 1986)
-
-        total_rate_before = sum(before$cases) 
-        total_rate_after = sum(after$cases)
-
-        total_rate <- c(total_rate_before, total_rate_after) 
-
-        years <- c(1985,1986)
-
-        df_total <- data.frame(years, total_rate)
+  if(!require(magrittr)) install.packages("magrittr") 
+  library(magrittr) 
+  
+  if(!require(dplyr)) install.packages("dplyr") 
+  library(dplyr) 
+  
+  if(!require(ggplot2)) install.packages("ggplot2") 
+  library(ggplot2) 
+  
+  if(!require(readr)) install.packages("readr") 
+  library(readr)
+  
+  dados <- read_csv("cancer_before_and_after_Chernobyl_Belarus.csv")
+  
+  ## Dados antes do acidente
+  before = subset(dados, dados$year == 1985)
+  
+  ## Dados depois do acidente
+  after = subset(dados, dados$year == 1986)
+  
+  total_rate_before = sum(before$cases) 
+  total_rate_after = sum(after$cases)
+  
+  total_rate <- c(total_rate_before, total_rate_after) 
+  
+  years <- c(1985,1986)
+  
+  df_total <- data.frame(years, total_rate)
+```
 
 ## Grafico de barras para visualizar a relação de casos de cancer com o acidente nuclear de Chernobyl.
 
-        df_total %>% ggplot() + geom_col(aes(x=years, y=total_rate)) + ggtitle("Casos de Cancer em Chernobyl comparando antes e depois do acidente nuclear em Chernobyl no ano 1986") + ylab("Casos de cancer") + expand_limits(y=0) + xlab("1985 vs 1986") + theme(axis.text.x=element_blank())
-        
-      perc_higher <- (total_rate_after - total_rate_before)/total_rate_before * 100
+```{r}
+  df_total %>% ggplot() + geom_col(aes(x=years, y=total_rate)) + ggtitle("Casos de Cancer em Chernobyl comparando antes e depois do acidente nuclear em Chernobyl no ano 1986") + ylab("Casos de cancer") + expand_limits(y=0) + xlab("1985 vs 1986") + theme(axis.text.x=element_blank())
 
-Houve um aumento de *38,27%* nos casos de câncer.
+  perc_higher <- (total_rate_after - total_rate_before)/total_rate_before * 100
+
+```
+Houve um aumento de *38,27%*(perc_higher) nos casos de câncer.
 
 ## Histograma separado por ano.
 
-    ggplot(data = dados, mapping = aes(x = cases)) +
-    geom_histogram(color = "white") + facet_wrap(~ year, ncol = 1) +
-    labs(x="Casos de cancer")
+```{r}
+  ggplot(data = dados, mapping = aes(x = cases)) +
+geom_histogram(color = "white") + facet_wrap(~ year, ncol = 1) +
+labs(x="Casos de cancer")
 
-        dados1 <- transform( dados, acidente= ifelse(year==1985, "before", "after"))
+dados1 <- transform( dados, acidente= ifelse(year==1985, "before", "after"))
 
-        dados1 %>% ggplot(aes(x = cases)) + geom_density(aes(fill = acidente),
-        alpha = 0.5 ) + labs(x="Casos de cancer", y="Densidade")
+dados1 %>% ggplot(aes(x = cases)) + geom_density(aes(fill = acidente),
+alpha = 0.5 ) + labs(x="Casos de cancer", y="Densidade")
+
+## Gráfico dos casos de cancer nas três cidades, antes e depois do acidente
+dados %>% ggplot() + geom_col(aes(year,cases, fill=cancer_type), alpha=0.7) + facet_grid(.~location) + scale_x_continuous(breaks = c(1985, 1986), labels = c("before", "after")) + ggtitle("Casos de cancer em diferentes cidades nantes e depois do acidente nuclear de Chernobyl")
+
+df_total
+
+x1 <- dados1$cases[dados1$acidente == "before"]
+x2 <- dados1$cases[dados1$acidente == "after"]
+
+par(mfrow = c(2,1), mar = rep(2.5, 4))
+
+hist(x1, prob=TRUE, main = "1985") 
+lines(density(x1))
+
+hist(x2, prob=TRUE, main = "1986", xlab = "Casos de cancer")
+lines(density(x2))
+
+```
         
-        ## Gráfico dos casos de cancer nas três cidades, antes e depois do acidente
-        dados %>% ggplot() + geom_col(aes(year,cases, fill=cancer_type), alpha=0.7) + facet_grid(.~location) + scale_x_continuous(breaks = c(1985, 1986), labels = c("before", "after")) + ggtitle("Casos de cancer em diferentes cidades nantes e depois do acidente nuclear de Chernobyl")
-
-        df_total
-
-        x1 <- dados1$cases[dados1$acidente == "before"]
-        x2 <- dados1$cases[dados1$acidente == "after"]
-
-        par(mfrow = c(2,1), mar = rep(2.5, 4))
-
-        hist(x1, prob=TRUE, main = "1985") 
-        lines(density(x1))
-
-        hist(x2, prob=TRUE, main = "1986", xlab = "Casos de cancer")
-        lines(density(x2))
-        
-
 ## Inferências estatísticas
-
-Foram realizadas 84 observações, sendo 42 no ano de 1985 e 42 no ano de
-1985, período antes e depois do acidente de Chernobyl. Para esses dados
-foram observados as quantidades de casos, para 7 tipos de câncer, por
-100.000 habitantes, homens e mulheres, em mesma proporção. Os tipos de
-câncer observados foram colon, rim, pele, pulmão, pancreas, reto e
-tireoide.
 
 Verificamos a média de todos os casos de câncer nos dois anos, referentes a antes e depois do acidente.
 
-Aparentemente houve um aumento de *38.27%* nos casos de cancer após o
-acidente na usina nuclear de Chernoby.
+Para comparar as médias utilizamos o test t student para amostras independentes
+
+```{r}
+  
+  antes <- before$cases
+  depois <- after$cases
+  
+  #test t
+  
+  t.test(antes, depois)
+```
+
+Para comparar as medianas, utilizamos o test de Mann-Whitney
+
+```{r}
+
+  test_mann_whitney <- wilcox.test(cases ~ year, data=dados)
+  test_mann_whitney
 
 ```
+
+Tomando 
+
+H0: mediana dos casos em 1985 = mediana dos casos em 1986  -> p > 0.05
+H1: mediana dos casos em 1985 != mediana dos casos em 1986 -> p <= 0.05
+
+Portanto, como o valor de p < 0.05, então devemos considerar a hipótese alternativa e rejeitar a hipótese nula.
+
+
+```{r}
   ## Casos de cancer em homens e mulheres, antes e depois do acidente
 dados %>% ggplot() + geom_col(aes(year, cases, fill=sex), alpha=0.7) + scale_x_continuous(breaks = c(1985, 1986), labels = c("before", "after"))  + ggtitle("Casos de cancer em homens e mulheres antes e depois do acidente")
 
@@ -166,8 +195,8 @@ before_women = subset(before, sex == 'women')
 total_rate_before_women = sum(before_women$cases)
 
 ## Mulheres depois
-after_men = subset(after, sex == 'men')
-total_rate_after_men = sum(after_men$cases)
+after_women = subset(after, sex == 'women')
+total_rate_after_women = sum(after_women$cases)
 
 
 ## Porcentagem de aumento de casos em homens e mulheres
