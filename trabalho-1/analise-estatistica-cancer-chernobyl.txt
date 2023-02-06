@@ -3,6 +3,7 @@ title: "Análise Estatística do casos de cancer antes e depois do acidente de C
 author: "Huggo Parcelly - Victor Paiva"
 date: "2022-11-21"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 editor_options:
