@@ -1,0 +1,145 @@
+---
+title: "Analise_Correlacao-e-Regressao"
+author: "Huggo Parcelly - Victor Paiva"
+date: "2023-02-06"
+output: pdf_document
+---
+
+# Analise de Correlação e Regressão Linear Simples
+
+O seguinte trabalho tem o objetivo de avaliar os fatores relacionados ao baixo peso de recem nascidos, utilizando o conjunto de dados de saúde e desenvolvimento da criança.
+
+Para tal foi realizado os seguintes passos.
+
+## Carregar e Instalar os pacotes utilizados no estudo.
+
+```{r}
+
+if(!require(pacman)) install.packages("pacman")
+library(pacman)
+
+if(!require(haven)) install.packages("haven")
+library(haven)
+
+pacman::p_load(dplyr, ggplot2, car, rstatix, lmtest, ggpubr)
+
+```
+
+## Leitura, visualização e organização dos dados
+
+```{r}
+getwd()
+dadosBase <- read_dta("chdsmetric.dta")
+View(dadosBase)           # Visualizacao dos dados em janela separada
+
+```
+
+Contudo, utilizou-se apenas quatro colunas da tabela. Sendo 'bwtkg' a coluna de referência para realizar as correlações com as colunas 'gestwks', 'mageyrs' e 'mheightcm'. Portanto, foi feita a filtragem retornando apenas as colunas de interesse.
+
+```{r}
+
+dados <- select(dadosBase, bwtkg, gestwks, mageyrs, mheightcm)
+
+View(dados)
+glimpse(dados)        # Para visualizacao de um resumo dos dados
+
+dados
+
+```
+
+## Analise de Correlação
+
+### Análise Exploratória entre BWTKG e GESTWKS
+
+```{r}
+dadosGest <- select(dados, bwtkg, gestwks)
+
+ggplot(dadosGest, aes(x=bwtkg, y=gestwks)) + 
+  geom_point()
+
+pairs(dadosGest)
+
+# Estimativa do coeficiente de correlacao (linear) entre duas variaveis numericas:
+cor(dadosGest)
+
+cor.result <- cor.test(dadosGest$bwtkg, dadosGest$gestwks)
+
+cor.result
+
+limInferior <- round(cor.result$conf.int[1],2)
+limInferior
+
+limSuperior <- round(cor.result$conf.int[2],2)
+limSuperior
+
+```
+
+Portanto, após analisar as informações obtidas a partir da inferência sobre uma possível existência de associação entre 'bwtkg' e 'gestwks', realizada através dos cálculos do coeficiênte de confiança e teste de hipótese. Verificou-se que com 95% de confiança o verdadeiro coeficiente de correlação linear está entre 0.36 e  0.49. Como este intervalo não tem correlação nula, ou seja, não passa pelo valor 0, pode-se concluir com 95% de confiança que existe associação linear e positiva entre estas duas variáveis em estudo.
+
+Ao aplicar o teste de hipótese, conclui-se que existe associação linear positiva entre as duas variáveis, de forma que quanto maior o tempo de gestação(gestwks) maior o peso dos recém nascidos(bwtkg). (r= 0.43; df=678; t=12.26; p < 2.2e-16).
+
+Sendo a correlação estimada r = 0.43, pode-se dizer que existe ((0.43)^2 = 0.1849) 18.5% de variância compartilhada entre as variáveis. Sendo assim, através dessas duas estimativas pode-se afirmar que a intensidade da correlação linear pode ser considerada moderada.
+
+### Análise Exploratória entre BWTKG e MAGEYRS
+
+```{r}
+dadosMage <- select(dados, bwtkg, mageyrs)
+
+ggplot(dadosMage, aes(x=bwtkg, y=mageyrs)) + 
+  geom_point()
+
+pairs(dadosMage)
+
+# Estimativa do coeficiente de correlacao (linear) entre duas variaveis numericas:
+cor(dadosMage)
+
+cor.result <- cor.test(dadosMage$bwtkg, dadosMage$mageyrs)
+
+cor.result
+
+limInferior <- round(cor.result$conf.int[1],2)
+limInferior
+
+limSuperior <- round(cor.result$conf.int[2],2)
+limSuperior
+
+```
+
+Após analisar as informações obtidas a partir da inferência sobre uma possível existência de associação entre 'bwtkg' e 'mageyrs', realizada através dos cálculos do coeficiênte de confiança e teste de hipótese. Verificou-se que com 95% de confiança o verdadeiro coeficiente de correlação linear está entre -0.074 e  0.076. Este intervalo tem correlação nula, ou seja, a correlação passa pelo valor 0, assim pode-se concluir com 95% de confiança que não existe correlação entre as duas variáveis em estudo.
+
+Ao aplicar o teste de hipótese, conclui-se que não existe associação linear, pois o coeficiênte de correlação se aproxima bastante do zero (r= 0.00096; df=678; t=0.025; p < 0.9801).
+
+Sendo a correlação estimada r = 0.00096, pode-se dizer que existe ((0.00096)^2 = 0.000000922) ~ 0.00% de variância compartilhada entre as variáveis. Sendo assim, através dessas duas estimativas pode-se afirmar que a intensidade da correlação linear pode ser considerada inexistente.
+
+### Análise Exploratória entre BWTKG e MHEIGHTCM
+
+```{r}
+dadosHeight <- select(dados, bwtkg, mheightcm)
+
+ggplot(dadosHeight, aes(x=bwtkg, y=mheightcm)) + 
+  geom_point()
+
+pairs(dadosHeight)
+
+# Estimativa do coeficiente de correlacao (linear) entre duas variaveis numericas:
+cor(dadosHeight)
+
+cor.result <- cor.test(dadosHeight$bwtkg, dadosHeight$mheightcm)
+
+cor.result
+
+limInferior <- round(cor.result$conf.int[1],2)
+limInferior
+
+limSuperior <- round(cor.result$conf.int[2],2)
+limSuperior
+
+```
+
+Após analisar as informações obtidas a partir da inferência sobre uma possível existência de associação entre o peso do bebe e a altura da mãe, realizada através dos cálculos do coeficiênte de confiança e teste de hipótese. Verificou-se que com 95% de confiança o verdadeiro coeficiente de correlação linear está entre 0,13 e  0.27. Como este intervalo não tem correlação nula, ou seja, não passa pelo valor 0, pode-se concluir com 95% de confiança que existe associação linear e positiva entre estas duas variáveis em estudo.
+
+Ao aplicar o teste de hipótese, conclui-se que existe associação linear positiva entre as duas variáveis, de forma que quanto maior a altura da mãe(mheightcm) maior o peso dos recém nascidos(bwtkg). (r= 0.2025; df=678; t=5.39; p < 9.968e-08).
+
+Sendo a correlação estimada r = 0.2025, pode-se dizer que existe ((0.2025)^2 = 0,041) 4.1% de variância compartilhada entre as variáveis. Sendo assim, através dessas duas estimativas pode-se afirmar que a intensidade da correlação linear pode ser considerada fraca.
+
+## Analise de Regressão Linear
