@@ -332,3 +332,47 @@ ggplot(data = dadosHeight, mapping = aes(x=mheightcm, y=bwtkg)) +
   theme_classic()
 
 ```
+
+### Conclusão
+
+Após a Analise de Regressão Linear foi possível concluir que o fator mais relevante e que mais influencia no peso do bebê ao nascer é a idade gestacional, pois apresentou resultados que indicam mais relação entre as variaveis, depois vem a altura da mãe que também mostrou resultados relevantes, e por fim a idade da mãe que não apresentou mudanças significativas entre as variaveis, concluindo que não há relação entre elas. 
+
+
+## Previsões
+
+### Previsão de peso com o parametro (idade gestacional)
+
+```{r}
+X    <- c(40, 45, 37, 35, 47)
+df.X <- data.frame("gestwks" = X)
+
+previsoes <- predict(mod1, df.X)
+
+resultados.previsoes <- cbind(X, previsoes)
+resultados.previsoes
+```
+
+### Previsão de peso com o parametro (Idade da mãe)
+
+```{r}
+X    <- c(40, 25, 18, 32, 35)
+df.X <- data.frame("mageyrs" = X)
+
+previsoes <- predict(mod2, df.X)
+
+resultados.previsoes <- cbind(X, previsoes)
+resultados.previsoes
+```
+
+### Previsão de peso com o parametro (Altura da mãe)
+
+```{r}
+X    <- c(165.89, 152.46, 173.15, 191.58, 180.22)
+df.X <- data.frame("mheightcm" = X)
+
+previsoes <- predict(mod3, df.X)
+
+resultados.previsoes <- cbind(X, previsoes)
+resultados.previsoes
+```
+
