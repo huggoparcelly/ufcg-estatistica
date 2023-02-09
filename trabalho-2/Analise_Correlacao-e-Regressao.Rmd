@@ -143,3 +143,192 @@ Ao aplicar o teste de hipótese, conclui-se que existe associação linear posit
 Sendo a correlação estimada r = 0.2025, pode-se dizer que existe ((0.2025)^2 = 0,041) 4.1% de variância compartilhada entre as variáveis. Sendo assim, através dessas duas estimativas pode-se afirmar que a intensidade da correlação linear pode ser considerada fraca.
 
 ## Analise de Regressão Linear
+
+
+### Análise de Regeressão Linear entre BWTKG e GESTWKS
+
+#### Modelo estimado
+
+
+```{r}
+# Relacao linear entre bwtkg e gestwks:
+
+ggplot(dadosGest, aes(x=gestwks, y=bwtkg)) +
+labs( x = "Idade gestacional (semanas)",
+      y = "Peso ao nascer (kg)") + geom_point()
+
+# Construcao do modelo:
+mod1 <- lm(bwtkg ~ gestwks, dadosGest)
+
+#Analise do modelo
+summary(mod1)
+```
+#### Verificação dos pressupostos para a regressão linear
+
+##### Verificação por Análise gráfica (Subjetiva)
+
+```{r}
+par(mfrow=c(2,2))
+
+plot(mod1)
+
+par(mfrow=c(1,1))
+```
+##### Verificação através de testes de hipóteses
+
+```{r}
+## Normalidade dos residuos:
+shapiro.test(mod1$residuals)
+
+
+## Outliers nos residuos:
+summary(rstandard(mod1))
+
+
+## Independencia dos residuos (Durbin-Watson):
+# From: car
+durbinWatsonTest(mod1)
+
+
+## Homocedasticidade (Breusch-Pagan):
+# From: lmtest
+bptest(mod1)
+
+```
+#### Visualização gráfica
+
+```{r}
+
+ggplot(data = dadosGest, mapping = aes(x=gestwks, y=bwtkg)) +
+  geom_point() +
+  labs( x = "Idade gestacional (semanas)",
+        y = "Peso ao nascer (kg)") +
+  geom_smooth(method = "lm", col = "red") +
+   
+  theme_classic()
+
+```
+
+
+### Análise de Regeressão Linear entre BWTKG e MAGEYRS
+
+#### Modelo estimado
+
+```{r}
+# Relacao linear entre bwtkg e mageyrs:
+
+ggplot(dadosMage, aes(x=mageyrs, y=bwtkg)) +
+labs( x = "Idade da mãe (anos)",
+      y = "Peso ao nascer (kg)") + geom_point()
+
+# Construcao do modelo:
+mod2 <- lm(bwtkg ~ mageyrs, dadosMage)
+
+#Analise do modelo
+summary(mod2)
+```
+#### Verificação dos pressupostos para a regressão linear
+
+##### Verificação por Análise gráfica (Subjetiva)
+
+```{r}
+par(mfrow=c(2,2))
+
+plot(mod2)
+
+par(mfrow=c(1,1))
+```
+##### Verificação através de testes de hipóteses
+
+```{r}
+## Normalidade dos residuos:
+shapiro.test(mod2$residuals)
+
+
+## Outliers nos residuos:
+summary(rstandard(mod2))
+
+
+## Independencia dos residuos (Durbin-Watson):
+durbinWatsonTest(mod2)
+
+
+## Homocedasticidade (Breusch-Pagan):
+bptest(mod2)
+
+```
+#### Visualização gráfica
+
+```{r}
+
+ggplot(data = dadosMage, mapping = aes(x=mageyrs, y=bwtkg)) +
+  geom_point() +
+  labs( x = "Idade da mãe (anos)",
+        y = "Peso ao nascer (kg)") +
+  geom_smooth(method = "lm", col = "red") +
+   
+  theme_classic()
+
+```
+
+
+### Análise de Regeressão Linear entre BWTKG e MHEIGHTCM
+
+#### Modelo estimado
+
+```{r}
+# Relacao linear entre bwtkg e mheightcm:
+
+ggplot(dadosHeight, aes(x=mheightcm, y=bwtkg)) +
+labs( x = "Altura da mãe (cm)",
+      y = "Peso ao nascer (kg)") + geom_point()
+
+# Construcao do modelo:
+mod3 <- lm(bwtkg ~ mheightcm, dadosHeight)
+
+#Analise do modelo
+summary(mod3)
+```
+#### Verificação dos pressupostos para a regressão linear
+
+##### Verificação por Análise gráfica (Subjetiva)
+
+```{r}
+par(mfrow=c(2,2))
+
+plot(mod3)
+
+par(mfrow=c(1,1))
+```
+##### Verificação através de testes de hipóteses
+
+```{r}
+## Normalidade dos residuos:
+shapiro.test(mod3$residuals)
+
+
+## Outliers nos residuos:
+summary(rstandard(mod3))
+
+
+## Independencia dos residuos (Durbin-Watson):
+durbinWatsonTest(mod3)
+
+
+## Homocedasticidade (Breusch-Pagan):
+bptest(mod3)
+
+```
+#### Visualização gráfica
+
+```{r}
+
+ggplot(data = dadosHeight, mapping = aes(x=mheightcm, y=bwtkg)) +
+  geom_point() +
+  labs( x = "Altura da mãe (cm)",
+        y = "Peso ao nascer (kg)") +
+  geom_smooth(method = "lm", col = "red") +
+   
+  theme_classic()
+
+```
